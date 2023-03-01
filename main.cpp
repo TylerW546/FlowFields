@@ -7,6 +7,9 @@
 #include <GL/glut.h>
 #endif
 #include <cmath>
+#include <iostream>
+
+using namespace GL;
 
 // A class for the moon.  A moon is really just an OpenGL display list.  The
 // display list is created with create(), and the draw() method calls it.

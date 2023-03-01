@@ -13,16 +13,22 @@ c = meson.get_compiler('c')
 source_files = ['main.cpp', 'glad.c']
 
 deps = []
+args = []
 
 host_system = host_machine.system()
 if host_system == 'windows'
   # Undefined references without this one
   deps += cpp.find_library('glfw3dll', dirs : project_dir / 'Libraries/lib', static : true)
   deps += cpp.find_library('glfw3', dirs : project_dir / 'Libraries/lib', static : true)
+  deps += cpp.find_library('glut32', dirs : project_dir / 'Libraries/lib', static : true)
+  deps += cpp.find_library('glut32', dirs : project_dir / 'Libraries/lib', static : false)
+  deps += dependency('GL')
+  
 
 elif host_system == 'darwin'
   deps += dependency('GL')
   deps += cpp.find_library('libglfw.3.3', dirs : project_dir + '/Libraries/lib', static : false)
+  args = ['-framework','GLUT']
 
 elif host_system == 'linux'
   deps += dependency('GL')
@@ -44,7 +50,7 @@ exe = executable('FlowFields', source_files,
     include_directories : inc,
     dependencies : deps,
     install : false,
-    link_args : ['-framework','GLUT'])
+    link_args : args)
 
 #pkg_mod = import('pkgconfig')
 #pkg_mod.generate(libraries : glBase,
